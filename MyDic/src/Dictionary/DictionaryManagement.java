@@ -1,30 +1,16 @@
 package Dictionary;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+
 import java.io.*;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Scanner;
+
+import static Dictionary.Dictionary.addWord;
+import static Dictionary.Dictionary.myDic;
 
 public class DictionaryManagement {
 
-    public static void insertFromCommandline() {
 
-        Scanner sc = new Scanner(System.in);
-        System.out.print("Enter number of new word:");
-        int n = sc.nextInt();
-        sc.nextLine();
-        System.out.println();
-
-        for (int i = 1; i <= n; i++) {
-            System.out.print("Input english word " + i + ": ");
-            String english = sc.nextLine();
-            System.out.print("Input vietnamese meaning " + i + ": ");
-            String vietnamese = sc.nextLine();
-            System.out.println();
-            Dictionary.myDic.add(new Word(english, vietnamese));
-        }
-        sc.close();
-    }
     public  static void insertFromFile()
     {
         try {
@@ -42,9 +28,12 @@ public class DictionaryManagement {
                 {   english = read_word[0];}
                 else
                 {  english = read_word[0];
-                   vietnamese = read_word[1];}
-                Dictionary.myDic.add(new Word(english,vietnamese));
+                   vietnamese = read_word[1];
+                   Word k = new Word(english,vietnamese);
+                   addWord(k);
+                }
             }
+
             in.close();
         } catch (FileNotFoundException ex)
         {
@@ -67,27 +56,6 @@ public class DictionaryManagement {
         return ans;
     }
 
-    public static void dictionaryExportToFile()
-    {
-
-        try {
-
-            OutputStreamWriter writer =
-                    new OutputStreamWriter(new FileOutputStream("src\\Dictionary\\fileWrite.txt"), StandardCharsets.UTF_8);
-            writer.write("No | English | Vietnamese\n");
-            int no = 0;
-            for (Word word: Dictionary.myDic)
-            {
-                no = no + 1;
-                writer.write(no +"  | "+word.getWord_target()+ " | "+ word.getWord_explain()+"\n");
-            }
-            writer.close();
-        } catch (IOException e)
-        {
-            e.printStackTrace();
-        }
-
-    }
 
     public static void deleteWord (String english_word)
     {
@@ -101,19 +69,21 @@ public class DictionaryManagement {
         }
     }
 
-    public static ArrayList<Word> dictionarySearcher(String english_word)
+    public static ObservableList<String> listTarget (String t)
     {
-        ArrayList<Word> res = new ArrayList<Word>();
-        for (Word word: Dictionary.myDic)
+        ObservableList<String> listTarget = FXCollections.observableArrayList();
+        if (t!=null)
         {
-            if (word.getWord_target().substring(0,english_word.length()).equals(english_word))
-            {
-                res.add(word);
-
-            }
+            for(Word w: myDic)
+                if (w.getWord_target().toUpperCase().startsWith(t.toUpperCase()))
+                    listTarget.add(w.getWord_target());
         }
-
-        return res;
+        else
+        {
+            for (Word w :myDic)
+                listTarget.add(w.getWord_target());
+        }
+        return listTarget;
     }
 }
 

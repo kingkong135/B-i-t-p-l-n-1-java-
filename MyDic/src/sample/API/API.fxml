@@ -22,7 +22,7 @@
       </HBox>
       <HBox layoutX="16.0" layoutY="155.0" prefHeight="102.0" prefWidth="418.0">
          <children>
-            <TextArea fx:id="explainAPI" prefHeight="114.0" prefWidth="418.0" />
+            <TextArea fx:id="explainAPI" editable="false" prefHeight="114.0" prefWidth="418.0" />
          </children>
       </HBox>
       <Button layoutX="16.0" layoutY="261.0" mnemonicParsing="false" onAction="#APITranslate" text="Translate">
